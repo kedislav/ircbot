@@ -6,6 +6,8 @@ int send_data(int sockfd, const char* data) {
   int len = strlen(data);
 
   while (total_sent < len) {
+    // could maybe cause problems
+    // but essentially makes sure it sends all of the data over
     int ret = send(sockfd, data + total_sent, len - total_sent, 0);
     if (ret < 0) {
       ERR("Sending data to server failed");
@@ -17,17 +19,26 @@ int send_data(int sockfd, const char* data) {
   return 0;
 }
 
+// registers ya on the IRC server
 int reg(int sockfd, const char* nick, const char* user, const char* channel) {
   /*---------[ VARIABLES ]---------*/
-  int ret = 0;
-  size_t len = strlen("NICK ") + strlen(nick) + strlen("\r\n");
-  char* buffer = (char*)malloc(len + 1);
+  int     ret = 0;
+  size_t  len = 0;
+  char* buffer;
+  char* tmp;
+ 
+  // check how long the string is gonna be
+  len = strlen("NICK ") + strlen(nick) + strlen("\r\n");
+  // allocate memory for our string (+1 because 0 byte)
+  buffer = (char*)malloc(len + 1);
   if (buffer == NULL) {
     ERR("Failed to allocate memory to register");
     return 1;
   }
-
+  
+  // assemble our string 
   snprintf(buffer, len + 1, "NICK %s\r\n", nick);
+  // send the data over
   ret = send_data(sockfd, buffer);
   if (ret == 1) {
     ERR("(nick) Failed to send data to server");
@@ -35,8 +46,10 @@ int reg(int sockfd, const char* nick, const char* user, const char* channel) {
     return 1;
   }
 
+  // repeat process
   len = strlen("USER ") + strlen(user) + strlen(" 0 * :robot\r\n");
-  char* tmp = realloc(buffer, len + 1);
+  // just here we resize our buffer so the new string fits
+  tmp = realloc(buffer, len + 1);
   if (tmp == NULL) {
     ERR("Failed to reallocate memory to register");
     free(buffer);
@@ -69,6 +82,7 @@ int reg(int sockfd, const char* nick, const char* user, const char* channel) {
     return 1;
   }
 
+  // IMPORTANT free the memory!!
   free(buffer);
   return 0;
 }

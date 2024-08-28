@@ -13,3 +13,9 @@ char* format(char* fmt, ...) {
     va_end(args);
     return formatted;
 }
+
+bool_t __empty(char* string) {
+    for (size_t i = 0; i < strlen(string); i++)
+        if (string[i] != ' ' && string[i] != '\0') return false;
+    return true;
+}

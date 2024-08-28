@@ -1,5 +1,8 @@
 #include "../includes/network.h"
 #include "../includes/util.h"
+#define NICK "ircbot"
+#define USER "kedbot-300"
+#define CHAN "#solrun-test"
 
 int main(void) {
   /*---------[ VARIABLES ]---------*/
@@ -12,11 +15,11 @@ int main(void) {
     close(conn->fd);
     exit(EXIT_FAILURE);
   }
-  LOG("Connected to server successfully!");
+  LOG("Connected to server successfully! %d", conn->fd);
 
   // register on IRC server
-  reg(conn, "ircbot", "kedbot-3000", "#solrun-test");
-  LOG("Successfully registered on IRC Server");
+  reg(conn, NICK, USER, CHAN);
+  LOG("Successfully registered %s as %s on %s", USER, NICK, CHAN);
 
   // send message to the server
   ret = send_data(conn->fd, command);
@@ -25,9 +28,9 @@ int main(void) {
     close(conn->fd);
     exit(EXIT_FAILURE);
   }
-  LOG("Sent a message to the server");
+  LOG("Sent %s to the server", command);
 
-  LOG("Press any button to close connection.");
+  printf("Listening ... (anykey)");
   getchar();
   close(conn->fd);
   return 0;

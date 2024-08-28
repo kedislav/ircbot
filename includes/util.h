@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -12,3 +13,5 @@
 
 #define ERR(msg, ...) fprintf(stderr, "[!] " msg "\n", ##__VA_ARGS__)
 #define LOG(msg, ...) printf("[+] " msg "\n", ##__VA_ARGS__)
+
+char* format(char* fmt, ...);

@@ -15,12 +15,7 @@ int main(void) {
   LOG("Connected to server successfully!");
 
   // register on IRC server
-  ret = reg(conn->fd, "ircbot", "kedbot-3000", "#solrun-test");
-  if (ret == 1) {
-    ERR("Failed to register on IRC Server with code %d", ret);
-    close(conn->fd);
-    exit(EXIT_FAILURE);
-  }
+  reg(conn, "ircbot", "kedbot-3000", "#solrun-test");
   LOG("Successfully registered on IRC Server");
 
   // send message to the server

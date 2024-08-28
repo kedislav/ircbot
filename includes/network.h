@@ -1,10 +1,6 @@
 #pragma once
 #include "util.h"
 
-int send_data(int sockfd, const char* data);
-int reg(int sockfd, const char* nick, const char* user, const char* channel);
-
-
 typedef struct connection {
     struct sockaddr_in addr;
     struct hostent* host;
@@ -13,3 +9,6 @@ typedef struct connection {
 
 connection_t *create_connection();
 int conn_connect(connection_t *conn);
+void conn_send(connection_t *conn, char* command);
+void reg(connection_t* conn, const char* nick, const char* user, const char* channel);
+int send_data(int sockfd, const char* data);
